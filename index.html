@@ -1,47 +1,887 @@
-<form id="registerForm">
-    <h2>Create Your Account</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <div class="form-group">
-        <label for="registerFullName">Full Name</label>
-        <input
-            type="text"
-            id="registerFullName"
-            placeholder="Enter your full name"
-            required
-        >
+    <title>ProthomChakri</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="container nav-container">
+
+            <a href="#" class="logo" onclick="showHome()">ProthomChakri</a>
+
+            <nav>
+                <button id="homeBtn" class="nav-link" onclick="showHome()">Home</button>
+                <button id="jobsBtn" class="nav-link" onclick="showJobs()">Jobs</button>
+
+                <button id="loginBtn"
+                        class="btn btn-outline"
+                        onclick="openLogin()">
+                    Login
+                </button>
+
+                <button id="registerBtn"
+                        class="btn btn-primary"
+                        onclick="openRegister()">
+                    Register
+                </button>
+
+                <button id="dashboardBtn"
+                        class="nav-link hidden"
+                        onclick="showDashboard()">
+                    My Dashboard
+                </button>
+
+                <button id="logoutBtn"
+                        class="btn btn-outline hidden"
+                        onclick="logout()">
+                    Logout
+                </button>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <!-- ================= HOME ================= -->
+    <main>
+
+        <section id="homePage" class="page">
+
+            <div class="container hero">
+
+                <div class="hero-content">
+
+                    <span class="eyebrow">
+                        PROFESSIONAL CAREER NETWORK
+                    </span>
+
+                    <h1>
+                        Build Your Career.
+                        <span>Find Your Opportunity.</span>
+                    </h1>
+
+                    <p>
+                        ProthomChakri helps job seekers build their
+                        professional identity, discover opportunities
+                        and grow their career network.
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <button class="btn btn-primary btn-large"
+                                onclick="openRegister()">
+                            Create Your Profile
+                        </button>
+
+                        <button class="btn btn-light btn-large"
+                                onclick="showJobs()">
+                            Explore Jobs
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="hero-card">
+
+                    <div class="avatar-large">
+                        PC
+                    </div>
+
+                    <h2>Your Professional Profile</h2>
+
+                    <p>
+                        Create your account and manage your professional
+                        information from your personal dashboard.
+                    </p>
+
+                    <div class="profile-progress">
+                        <div></div>
+                    </div>
+
+                    <small>
+                        Complete your profile after registration
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <span class="eyebrow">
+                        FOR JOB SEEKERS
+                    </span>
+
+                    <h2>
+                        Everything starts with your profile
+                    </h2>
+
+                </div>
+
+
+                <div class="feature-grid">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            👤
+                        </div>
+
+                        <h3>
+                            Personal Dashboard
+                        </h3>
+
+                        <p>
+                            Manage your professional identity and career
+                            information in one place.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            💼
+                        </div>
+
+                        <h3>
+                            Find Jobs
+                        </h3>
+
+                        <p>
+                            Discover career opportunities that match
+                            your skills and goals.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+                            🤝
+                        </div>
+
+                        <h3>
+                            Build Your Network
+                        </h3>
+
+                        <p>
+                            Connect with professionals and grow your
+                            career network.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= JOBS ================= -->
+        <section id="jobsPage" class="page hidden">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <span class="eyebrow">
+                        CAREER OPPORTUNITIES
+                    </span>
+
+                    <h2>
+                        Find Your Next Job
+                    </h2>
+
+                </div>
+
+
+                <input
+                    id="jobSearch"
+                    class="job-search"
+                    type="search"
+                    placeholder="Search jobs, companies or skills..."
+                    oninput="filterJobs()"
+                >
+
+
+                <div id="jobList">
+
+                    <div class="job-card">
+
+                        <div>
+
+                            <span class="job-tag">
+                                Textile
+                            </span>
+
+                            <h3>
+                                Junior Textile Engineer
+                            </h3>
+
+                            <p>
+                                Production & Quality • Bangladesh
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="openRegister()">
+                            Apply
+                        </button>
+
+                    </div>
+
+
+                    <div class="job-card">
+
+                        <div>
+
+                            <span class="job-tag">
+                                Merchandising
+                            </span>
+
+                            <h3>
+                                Assistant Merchandiser
+                            </h3>
+
+                            <p>
+                                Apparel • Bangladesh
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="openRegister()">
+                            Apply
+                        </button>
+
+                    </div>
+
+
+                    <div class="job-card">
+
+                        <div>
+
+                            <span class="job-tag">
+                                Quality
+                            </span>
+
+                            <h3>
+                                Quality Executive
+                            </h3>
+
+                            <p>
+                                Garments • Bangladesh
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="openRegister()">
+                            Apply
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= DASHBOARD ================= -->
+        <section id="dashboardPage" class="page hidden">
+
+            <div class="container">
+
+                <div class="dashboard-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            PERSONAL DASHBOARD
+                        </span>
+
+                        <h1>
+                            Welcome,
+                            <span id="welcomeName">
+                                User
+                            </span>
+                        </h1>
+
+                        <p>
+                            Manage your professional profile.
+                        </p>
+
+                    </div>
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="showProfileForm()">
+                        Edit Profile
+                    </button>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <!-- PROFILE CARD -->
+                    <div class="profile-card">
+
+                        <div id="profileAvatar"
+                             class="profile-avatar">
+                            U
+                        </div>
+
+                        <h2 id="profileName">
+                            Your Name
+                        </h2>
+
+                        <p id="profileGender">
+                            Gender
+                        </p>
+
+                        <hr>
+
+                        <p class="muted">
+                            Profile Completion
+                        </p>
+
+                        <div class="profile-progress">
+                            <div id="profileProgress"></div>
+                        </div>
+
+                        <small id="completionText">
+                            0% Complete
+                        </small>
+
+                    </div>
+
+
+                    <!-- DASHBOARD CONTENT -->
+                    <div class="dashboard-content">
+
+                        <div class="dashboard-card">
+
+                            <h2>
+                                About
+                            </h2>
+
+                            <p id="profileBio"
+                               class="muted">
+                                Add your professional bio.
+                            </p>
+
+                        </div>
+
+
+                        <div class="dashboard-card">
+
+                            <h2>
+                                Career Information
+                            </h2>
+
+                            <div class="info-grid">
+
+                                <div>
+                                    <span>
+                                        Education
+                                    </span>
+
+                                    <strong id="profileEducation">
+                                        Not added
+                                    </strong>
+                                </div>
+
+
+                                <div>
+                                    <span>
+                                        Skills
+                                    </span>
+
+                                    <strong id="profileSkills">
+                                        Not added
+                                    </strong>
+                                </div>
+
+
+                                <div>
+                                    <span>
+                                        Experience
+                                    </span>
+
+                                    <strong id="profileExperience">
+                                        Not added
+                                    </strong>
+                                </div>
+
+
+                                <div>
+                                    <span>
+                                        Location
+                                    </span>
+
+                                    <strong id="profileLocation">
+                                        Not added
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= PROFILE FORM ================= -->
+        <section id="profilePage" class="page hidden">
+
+            <div class="container">
+
+                <div class="form-card">
+
+                    <button
+                        class="back-button"
+                        onclick="showDashboard()">
+                        ← Back to Dashboard
+                    </button>
+
+                    <span class="eyebrow">
+                        PROFESSIONAL PROFILE
+                    </span>
+
+                    <h1>
+                        Complete Your Profile
+                    </h1>
+
+                    <p class="muted">
+                        Add your professional information.
+                    </p>
+
+
+                    <form id="profileForm">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>
+                                    Full Name
+                                </label>
+
+                                <input
+                                    id="editFullName"
+                                    type="text"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Gender Identity
+                                </label>
+
+                                <select
+                                    id="editGender"
+                                    required>
+
+                                    <option value="">
+                                        Select Gender
+                                    </option>
+
+                                    <option value="Male">
+                                        Male
+                                    </option>
+
+                                    <option value="Female">
+                                        Female
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group full">
+
+                                <label>
+                                    Professional Headline
+                                </label>
+
+                                <input
+                                    id="editHeadline"
+                                    type="text"
+                                    placeholder="Example: Textile Engineering Graduate"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group full">
+
+                                <label>
+                                    About / Bio
+                                </label>
+
+                                <textarea
+                                    id="editBio"
+                                    rows="5"
+                                    placeholder="Tell employers about yourself..."
+                                ></textarea>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Education
+                                </label>
+
+                                <input
+                                    id="editEducation"
+                                    type="text"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Skills
+                                </label>
+
+                                <input
+                                    id="editSkills"
+                                    type="text"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Experience
+                                </label>
+
+                                <input
+                                    id="editExperience"
+                                    type="text"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Location
+                                </label>
+
+                                <input
+                                    id="editLocation"
+                                    type="text"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="btn btn-primary btn-large"
+                            type="submit">
+
+                            Save Profile
+
+                        </button>
+
+                        <p
+                            id="profileMessage"
+                            class="message">
+                        </p>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= AUTH MODAL ================= -->
+    <div id="authModal"
+         class="modal hidden">
+
+        <div
+            class="modal-background"
+            onclick="closeAuth()">
+        </div>
+
+
+        <div class="auth-box">
+
+            <button
+                class="close-button"
+                onclick="closeAuth()">
+                ×
+            </button>
+
+
+            <!-- LOGIN -->
+            <div id="loginFormContainer">
+
+                <span class="eyebrow">
+                    WELCOME BACK
+                </span>
+
+                <h2>
+                    Login to ProthomChakri
+                </h2>
+
+
+                <form id="loginForm">
+
+                    <div class="form-group">
+
+                        <label>
+                            Email
+                        </label>
+
+                        <input
+                            id="loginEmail"
+                            type="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Password
+                        </label>
+
+                        <input
+                            id="loginPassword"
+                            type="password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button
+                        class="btn btn-primary full-button"
+                        type="submit">
+
+                        Login
+
+                    </button>
+
+
+                    <p
+                        id="loginMessage"
+                        class="message">
+                    </p>
+
+                </form>
+
+
+                <p class="switch-text">
+                    Don't have an account?
+
+                    <button
+                        onclick="openRegister()">
+                        Register
+                    </button>
+                </p>
+
+            </div>
+
+
+            <!-- REGISTER -->
+            <div
+                id="registerFormContainer"
+                class="hidden">
+
+                <span class="eyebrow">
+                    JOIN PROTHOMCHAKRI
+                </span>
+
+                <h2>
+                    Create Your Account
+                </h2>
+
+                <p class="muted">
+                    Register with only four details.
+                </p>
+
+
+                <form id="registerForm">
+
+                    <!-- 1. FULL NAME -->
+                    <div class="form-group">
+
+                        <label>
+                            Full Name
+                        </label>
+
+                        <input
+                            id="registerFullName"
+                            type="text"
+                            placeholder="Enter your full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- 2. EMAIL -->
+                    <div class="form-group">
+
+                        <label>
+                            Email
+                        </label>
+
+                        <input
+                            id="registerEmail"
+                            type="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- 3. PASSWORD -->
+                    <div class="form-group">
+
+                        <label>
+                            Password
+                        </label>
+
+                        <input
+                            id="registerPassword"
+                            type="password"
+                            placeholder="At least 6 characters"
+                            minlength="6"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- 4. GENDER IDENTITY -->
+                    <div class="form-group">
+
+                        <label>
+                            Gender Identity
+                        </label>
+
+                        <select
+                            id="genderIdentity"
+                            required>
+
+                            <option value="">
+                                Select Gender
+                            </option>
+
+                            <option value="Male">
+                                Male
+                            </option>
+
+                            <option value="Female">
+                                Female
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button
+                        class="btn btn-primary full-button"
+                        type="submit">
+
+                        Create Account
+
+                    </button>
+
+
+                    <p
+                        id="registerMessage"
+                        class="message">
+                    </p>
+
+                </form>
+
+
+                <p class="switch-text">
+
+                    Already have an account?
+
+                    <button
+                        onclick="openLogin()">
+                        Login
+                    </button>
+
+                </p>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="form-group">
-        <label for="registerEmail">Email</label>
-        <input
-            type="email"
-            id="registerEmail"
-            placeholder="Enter your email"
-            required
-        >
+
+    <div id="toast"
+         class="toast">
     </div>
 
-    <div class="form-group">
-        <label for="registerPassword">Password</label>
-        <input
-            type="password"
-            id="registerPassword"
-            placeholder="Create a password"
-            required
-            minlength="6"
-        >
-    </div>
 
-    <div class="form-group">
-        <label for="genderIdentity">Gender Identity</label>
-        <select id="genderIdentity" required>
-            <option value="">Select gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-    </div>
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 
-    <button type="submit">Register</button>
-
-    <p id="registerMessage"></p>
-</form>
+</body>
+</html>
