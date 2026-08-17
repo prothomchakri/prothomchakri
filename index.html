@@ -6,6 +6,7 @@
   <title>ProthomChakri — Your First Step to Your Career</title>
   <meta name="description" content="ProthomChakri is a Bangladesh-focused job platform for fresh graduates, interns and entry-level job seekers.">
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,36 +16,59 @@
 <header class="navbar">
   <div class="container nav-container">
     <a href="#" class="logo"><span class="logo-mark">P</span><span>Prothom<span class="logo-highlight">Chakri</span></span></a>
+
     <nav class="nav-links">
       <a href="#jobs">Find Jobs</a>
       <a href="#categories">Categories</a>
       <a href="#companies">Companies</a>
       <a href="#career">Career Resources</a>
     </nav>
+
     <div class="nav-actions">
       <button class="login-btn">Sign in</button>
       <button class="employer-btn">Post a Job</button>
     </div>
+
     <button class="mobile-menu" id="mobileMenu" aria-label="Menu">☰</button>
   </div>
 </header>
 
 <main>
+
 <section class="hero">
   <div class="container hero-container">
+
     <div class="hero-content">
-      <div class="hero-badge">🚀 Built for Bangladesh's Freshers</div>
-      <h1>Your first job.<span>Your first step.</span></h1>
-      <p class="hero-description">Discover internships, trainee programs and entry-level jobs designed for fresh graduates and young professionals across Bangladesh.</p>
+
+      <div class="hero-badge">
+        🚀 Built for Bangladesh's Freshers
+      </div>
+
+      <h1>
+        Your first job.
+        <span>Your first step.</span>
+      </h1>
+
+      <p class="hero-description">
+        Discover internships, trainee programs and entry-level jobs designed for fresh graduates and young professionals across Bangladesh.
+      </p>
 
       <div class="search-box">
+
         <div class="search-field">
           <span class="search-icon">⌕</span>
-          <input type="text" id="jobSearch" placeholder="Job title, skill or company">
+          <input
+            type="text"
+            id="jobSearch"
+            placeholder="Job title, skill or company"
+          >
         </div>
+
         <div class="search-divider"></div>
+
         <div class="search-field location-field">
           <span class="location-icon">⌖</span>
+
           <select id="locationSearch">
             <option value="">All Bangladesh</option>
             <option value="Dhaka">Dhaka</option>
@@ -57,7 +81,11 @@
             <option value="Khulna">Khulna</option>
           </select>
         </div>
-        <button class="search-button" id="searchButton">Search Jobs</button>
+
+        <button class="search-button" id="searchButton">
+          Search Jobs
+        </button>
+
       </div>
 
       <div class="popular-searches">
@@ -67,187 +95,800 @@
         <button>Management Trainee</button>
         <button>Textile</button>
       </div>
+
     </div>
 
     <div class="hero-visual">
+
       <div class="floating-card card-one">
         <div class="mini-icon">🎓</div>
-        <div><strong>Fresh Graduate</strong><small>1,240+ opportunities</small></div>
+
+        <div>
+          <strong>Fresh Graduate</strong>
+          <small>1,240+ opportunities</small>
+        </div>
       </div>
 
       <div class="profile-card">
+
         <div class="profile-top">
+
           <div class="avatar">FA</div>
-          <div><h3>Start your career</h3><p>Build your professional profile</p></div>
+
+          <div>
+            <h3>Start your career</h3>
+            <p>Build your professional profile</p>
+          </div>
+
         </div>
+
         <div class="profile-progress">
-          <div class="progress-label"><span>Profile strength</span><strong>75%</strong></div>
-          <div class="progress-bar"><div></div></div>
+
+          <div class="progress-label">
+            <span>Profile strength</span>
+            <strong>75%</strong>
+          </div>
+
+          <div class="progress-bar">
+            <div></div>
+          </div>
+
         </div>
+
         <div class="profile-items">
           <div>✓ Education added</div>
           <div>✓ Skills added</div>
           <div>○ Upload your CV</div>
         </div>
-        <button class="profile-button">Complete Profile</button>
+
+        <button class="profile-button">
+          Complete Profile
+        </button>
+
       </div>
 
       <div class="floating-card card-two">
         <span class="green-dot"></span>
-        <div><strong>New opportunities</strong><small>Posted today</small></div>
+
+        <div>
+          <strong>New opportunities</strong>
+          <small>Posted today</small>
+        </div>
       </div>
+
     </div>
+
   </div>
 </section>
+
 
 <section class="trust-section">
+
   <div class="container trust-container">
-    <div><strong>5,000+</strong><span>Jobs</span></div>
-    <div><strong>1,000+</strong><span>Companies</span></div>
-    <div><strong>10,000+</strong><span>Freshers</span></div>
-    <div><strong>64</strong><span>Districts</span></div>
+
+    <div>
+      <strong>5,000+</strong>
+      <span>Jobs</span>
+    </div>
+
+    <div>
+      <strong>1,000+</strong>
+      <span>Companies</span>
+    </div>
+
+    <div>
+      <strong>10,000+</strong>
+      <span>Freshers</span>
+    </div>
+
+    <div>
+      <strong>64</strong>
+      <span>Districts</span>
+    </div>
+
   </div>
+
 </section>
+
 
 <section class="section" id="categories">
+
   <div class="container">
+
     <div class="section-heading">
-      <div><span class="section-label">EXPLORE OPPORTUNITIES</span><h2>Start where your career begins</h2></div>
-      <a href="#jobs" class="view-all">View all jobs →</a>
+
+      <div>
+        <span class="section-label">EXPLORE OPPORTUNITIES</span>
+        <h2>Start where your career begins</h2>
+      </div>
+
+      <a href="#jobs" class="view-all">
+        View all jobs →
+      </a>
+
     </div>
+
 
     <div class="category-grid">
-      <div class="category-card" data-category="Fresh Graduate"><div class="category-icon">🎓</div><h3>Fresh Graduate</h3><p>1,240 jobs</p></div>
-      <div class="category-card" data-category="Internship"><div class="category-icon">💼</div><h3>Internship</h3><p>620 jobs</p></div>
-      <div class="category-card" data-category="Management Trainee"><div class="category-icon">🚀</div><h3>Management Trainee</h3><p>340 jobs</p></div>
-      <div class="category-card" data-category="IT & Software"><div class="category-icon">💻</div><h3>IT & Software</h3><p>890 jobs</p></div>
-      <div class="category-card" data-category="Textile & Garments"><div class="category-icon">🏭</div><h3>Textile & Garments</h3><p>530 jobs</p></div>
-      <div class="category-card" data-category="Banking & Finance"><div class="category-icon">🏦</div><h3>Banking & Finance</h3><p>410 jobs</p></div>
-      <div class="category-card" data-category="Marketing"><div class="category-icon">📈</div><h3>Marketing & Sales</h3><p>720 jobs</p></div>
-      <div class="category-card" data-category="Engineering"><div class="category-icon">⚙️</div><h3>Engineering</h3><p>380 jobs</p></div>
+
+      <div class="category-card" data-category="Fresh Graduate">
+        <div class="category-icon">🎓</div>
+        <h3>Fresh Graduate</h3>
+        <p>1,240 jobs</p>
+      </div>
+
+      <div class="category-card" data-category="Internship">
+        <div class="category-icon">💼</div>
+        <h3>Internship</h3>
+        <p>620 jobs</p>
+      </div>
+
+      <div class="category-card" data-category="Management Trainee">
+        <div class="category-icon">🚀</div>
+        <h3>Management Trainee</h3>
+        <p>340 jobs</p>
+      </div>
+
+      <div class="category-card" data-category="IT & Software">
+        <div class="category-icon">💻</div>
+        <h3>IT & Software</h3>
+        <p>890 jobs</p>
+      </div>
+
+      <div class="category-card" data-category="Textile & Garments">
+        <div class="category-icon">🏭</div>
+        <h3>Textile & Garments</h3>
+        <p>530 jobs</p>
+      </div>
+
+      <div class="category-card" data-category="Banking & Finance">
+        <div class="category-icon">🏦</div>
+        <h3>Banking & Finance</h3>
+        <p>410 jobs</p>
+      </div>
+
+      <div class="category-card" data-category="Marketing">
+        <div class="category-icon">📈</div>
+        <h3>Marketing & Sales</h3>
+        <p>720 jobs</p>
+      </div>
+
+      <div class="category-card" data-category="Engineering">
+        <div class="category-icon">⚙️</div>
+        <h3>Engineering</h3>
+        <p>380 jobs</p>
+      </div>
+
     </div>
+
   </div>
+
 </section>
+
 
 <section class="section jobs-section" id="jobs">
+
   <div class="container">
+
     <div class="section-heading">
-      <div><span class="section-label">LATEST OPPORTUNITIES</span><h2>Jobs you can apply for today</h2></div>
-      <a href="#" class="view-all">See all jobs →</a>
+
+      <div>
+        <span class="section-label">LATEST OPPORTUNITIES</span>
+        <h2>Jobs you can apply for today</h2>
+      </div>
+
+      <a href="#" class="view-all">
+        See all jobs →
+      </a>
+
     </div>
+
 
     <div class="jobs-layout">
+
       <div class="job-list" id="jobList">
 
-        <article class="job-card" data-title="Junior Textile Engineer" data-category="Textile & Garments" data-location="Dhaka">
+
+        <article
+          class="job-card"
+          data-title="Junior Textile Engineer"
+          data-category="Textile & Garments"
+          data-location="Dhaka"
+        >
+
           <div class="company-logo">AT</div>
+
           <div class="job-info">
-            <div class="job-top"><div><h3>Junior Textile Engineer</h3><p class="company-name">ABC Textile Industries Ltd.</p></div><button class="bookmark">♡</button></div>
-            <div class="job-meta"><span>📍 Dhaka</span><span>💼 Full-time</span><span>🎓 Fresher</span></div>
-            <div class="job-bottom"><div class="job-tags"><span>Textile</span><span>Engineering</span></div><span class="posted">2 hours ago</span></div>
+
+            <div class="job-top">
+
+              <div>
+                <h3>Junior Textile Engineer</h3>
+                <p class="company-name">
+                  ABC Textile Industries Ltd.
+                </p>
+              </div>
+
+              <button class="bookmark">♡</button>
+
+            </div>
+
+            <div class="job-meta">
+              <span>📍 Dhaka</span>
+              <span>💼 Full-time</span>
+              <span>🎓 Fresher</span>
+            </div>
+
+            <div class="job-bottom">
+
+              <div class="job-tags">
+                <span>Textile</span>
+                <span>Engineering</span>
+              </div>
+
+              <span class="posted">2 hours ago</span>
+
+            </div>
+
           </div>
+
         </article>
 
-        <article class="job-card" data-title="Management Trainee Officer" data-category="Management Trainee" data-location="Dhaka">
+
+        <article
+          class="job-card"
+          data-title="Management Trainee Officer"
+          data-category="Management Trainee"
+          data-location="Dhaka"
+        >
+
           <div class="company-logo blue">BB</div>
+
           <div class="job-info">
-            <div class="job-top"><div><h3>Management Trainee Officer</h3><p class="company-name">Bright Bangladesh Ltd.</p></div><button class="bookmark">♡</button></div>
-            <div class="job-meta"><span>📍 Dhaka</span><span>💼 Full-time</span><span>🎓 0–1 years</span></div>
-            <div class="job-bottom"><div class="job-tags"><span>Management</span><span>Graduate</span></div><span class="posted">5 hours ago</span></div>
+
+            <div class="job-top">
+
+              <div>
+                <h3>Management Trainee Officer</h3>
+                <p class="company-name">
+                  Bright Bangladesh Ltd.
+                </p>
+              </div>
+
+              <button class="bookmark">♡</button>
+
+            </div>
+
+            <div class="job-meta">
+              <span>📍 Dhaka</span>
+              <span>💼 Full-time</span>
+              <span>🎓 0–1 years</span>
+            </div>
+
+            <div class="job-bottom">
+
+              <div class="job-tags">
+                <span>Management</span>
+                <span>Graduate</span>
+              </div>
+
+              <span class="posted">5 hours ago</span>
+
+            </div>
+
           </div>
+
         </article>
 
-        <article class="job-card" data-title="Software Engineer Intern" data-category="Internship" data-location="Chattogram">
+
+        <article
+          class="job-card"
+          data-title="Software Engineer Intern"
+          data-category="Internship"
+          data-location="Chattogram"
+        >
+
           <div class="company-logo purple">TC</div>
+
           <div class="job-info">
-            <div class="job-top"><div><h3>Software Engineer Intern</h3><p class="company-name">TechCore Bangladesh</p></div><button class="bookmark">♡</button></div>
-            <div class="job-meta"><span>📍 Chattogram</span><span>💼 Internship</span><span>🎓 Fresher</span></div>
-            <div class="job-bottom"><div class="job-tags"><span>JavaScript</span><span>React</span></div><span class="posted">1 day ago</span></div>
+
+            <div class="job-top">
+
+              <div>
+                <h3>Software Engineer Intern</h3>
+                <p class="company-name">
+                  TechCore Bangladesh
+                </p>
+              </div>
+
+              <button class="bookmark">♡</button>
+
+            </div>
+
+            <div class="job-meta">
+              <span>📍 Chattogram</span>
+              <span>💼 Internship</span>
+              <span>🎓 Fresher</span>
+            </div>
+
+            <div class="job-bottom">
+
+              <div class="job-tags">
+                <span>JavaScript</span>
+                <span>React</span>
+              </div>
+
+              <span class="posted">1 day ago</span>
+
+            </div>
+
           </div>
+
         </article>
 
-        <article class="job-card" data-title="Graduate Trainee" data-category="Graduate Trainee" data-location="Gazipur">
+
+        <article
+          class="job-card"
+          data-title="Graduate Trainee"
+          data-category="Graduate Trainee"
+          data-location="Gazipur"
+        >
+
           <div class="company-logo orange">FG</div>
+
           <div class="job-info">
-            <div class="job-top"><div><h3>Graduate Trainee</h3><p class="company-name">Future Group Bangladesh</p></div><button class="bookmark">♡</button></div>
-            <div class="job-meta"><span>📍 Gazipur</span><span>💼 Full-time</span><span>🎓 Fresh Graduate</span></div>
-            <div class="job-bottom"><div class="job-tags"><span>Graduate</span><span>Training</span></div><span class="posted">1 day ago</span></div>
+
+            <div class="job-top">
+
+              <div>
+                <h3>Graduate Trainee</h3>
+                <p class="company-name">
+                  Future Group Bangladesh
+                </p>
+              </div>
+
+              <button class="bookmark">♡</button>
+
+            </div>
+
+            <div class="job-meta">
+              <span>📍 Gazipur</span>
+              <span>💼 Full-time</span>
+              <span>🎓 Fresh Graduate</span>
+            </div>
+
+            <div class="job-bottom">
+
+              <div class="job-tags">
+                <span>Graduate</span>
+                <span>Training</span>
+              </div>
+
+              <span class="posted">1 day ago</span>
+
+            </div>
+
           </div>
+
         </article>
 
       </div>
+
 
       <aside class="jobs-sidebar">
+
         <div class="sidebar-card">
+
           <div class="sidebar-icon">🔔</div>
+
           <h3>Never miss a job</h3>
-          <p>Get personalized job alerts based on your skills and career interests.</p>
-          <button class="outline-button">Create Job Alert</button>
+
+          <p>
+            Get personalized job alerts based on your skills and career interests.
+          </p>
+
+          <button class="outline-button">
+            Create Job Alert
+          </button>
+
         </div>
+
 
         <div class="sidebar-card employer-card">
+
           <span class="section-label">FOR EMPLOYERS</span>
+
           <h3>Looking for fresh talent?</h3>
-          <p>Reach motivated graduates and entry-level professionals.</p>
-          <button class="dark-button">Post a Job →</button>
+
+          <p>
+            Reach motivated graduates and entry-level professionals.
+          </p>
+
+          <button class="dark-button">
+            Post a Job →
+          </button>
+
         </div>
+
       </aside>
+
     </div>
+
   </div>
+
 </section>
+
 
 <section class="career-section" id="career">
+
   <div class="container career-container">
+
     <div class="career-content">
+
       <span class="section-label">START SMART</span>
-      <h2>Everything you need to start your career.</h2>
-      <p>Finding your first job is only the beginning. Build your CV, prepare for interviews and develop the skills employers are looking for.</p>
+
+      <h2>
+        Everything you need to start your career.
+      </h2>
+
+      <p>
+        Finding your first job is only the beginning. Build your CV,
+        prepare for interviews and develop the skills employers are looking for.
+      </p>
+
       <div class="career-links">
-        <a href="#">📝 CV Builder <span>→</span></a>
-        <a href="#">🎯 Interview Preparation <span>→</span></a>
-        <a href="#">📚 Career Guides <span>→</span></a>
+
+        <a href="#">
+          📝 CV Builder
+          <span>→</span>
+        </a>
+
+        <a href="#">
+          🎯 Interview Preparation
+          <span>→</span>
+        </a>
+
+        <a href="#">
+          📚 Career Guides
+          <span>→</span>
+        </a>
+
       </div>
+
     </div>
+
 
     <div class="career-visual">
+
       <div class="career-box">
+
         <div class="career-box-top">
+
           <div class="mini-avatar">FA</div>
-          <div><strong>Career Profile</strong><span>Ready to apply</span></div>
+
+          <div>
+            <strong>Career Profile</strong>
+            <span>Ready to apply</span>
+          </div>
+
         </div>
-        <div class="skill-line"><span>Textile Engineering</span><strong>92%</strong></div>
-        <div class="skill-line"><span>Microsoft Excel</span><strong>85%</strong></div>
-        <div class="skill-line"><span>Communication</span><strong>88%</strong></div>
+
+        <div class="skill-line">
+          <span>Textile Engineering</span>
+          <strong>92%</strong>
+        </div>
+
+        <div class="skill-line">
+          <span>Microsoft Excel</span>
+          <strong>85%</strong>
+        </div>
+
+        <div class="skill-line">
+          <span>Communication</span>
+          <strong>88%</strong>
+        </div>
+
       </div>
+
     </div>
+
   </div>
+
 </section>
+
 
 <section class="employer-section" id="companies">
+
   <div class="container employer-container">
+
     <div>
+
       <span class="section-label">FOR EMPLOYERS</span>
-      <h2>Your next great hire could be a fresher.</h2>
-      <p>Connect with motivated graduates and entry-level professionals across Bangladesh.</p>
+
+      <h2>
+        Your next great hire could be a fresher.
+      </h2>
+
+      <p>
+        Connect with motivated graduates and entry-level professionals across Bangladesh.
+      </p>
+
     </div>
-    <button class="employer-cta">Post Your First Job →</button>
+
+    <button class="employer-cta">
+      Post Your First Job →
+    </button>
+
   </div>
+
 </section>
+
 </main>
 
-<footer class="footer">
-  <div class="container footer-grid">
-    <div class="footer-brand">
-      <a href="#" class="logo footer-logo"><span class="logo-mark">P</span><span>Prothom<span class="logo-highlight">Chakri</span></span></a>
-      <p>Your First Step to Your Career.</p>
-      <p class="copyright">© 2026 ProthomChakri. All rights reserved.</p>
+
+<!-- SUPABASE AUTHENTICATION MODAL -->
+
+<div class="auth-overlay" id="authOverlay" aria-hidden="true">
+
+  <div
+    class="auth-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="authTitle"
+  >
+
+    <button
+      class="auth-close"
+      id="authClose"
+      aria-label="Close"
+    >
+      ×
+    </button>
+
+    <div class="auth-header">
+
+      <span class="section-label">
+        PROTHOMCHAKRI ACCOUNT
+      </span>
+
+      <h2 id="authTitle">
+        Welcome back
+      </h2>
+
+      <p id="authSubtitle">
+        Sign in to continue.
+      </p>
+
     </div>
-    <div class="footer-column"><h4>For Job Seekers</h4><a href="#jobs">Find Jobs</a><a href="#">Career Resources</a><a href="#">CV Builder</a><a href="#">Job Alerts</a></div>
-    <div class="footer-column"><h4>For Employers</h4><a href="#">Post a Job</a><a href="#">Find Candidates</a><a href="#">Employer Dashboard</a><a href="#">Pricing</a></div>
-    <div class="footer-column"><h4>ProthomChakri</h4><a href="#">About Us</a><a href="#">Contact</a><a href="#">Privacy Policy</a><a href="#">Terms</a></div>
+
+
+    <div class="auth-tabs">
+
+      <button
+        class="auth-tab active"
+        id="signInTab"
+        type="button"
+      >
+        Sign in
+      </button>
+
+      <button
+        class="auth-tab"
+        id="registerTab"
+        type="button"
+      >
+        Register
+      </button>
+
+    </div>
+
+
+    <form id="authForm">
+
+      <label for="authEmail">
+        Email
+      </label>
+
+      <input
+        id="authEmail"
+        type="email"
+        autocomplete="email"
+        required
+        placeholder="you@example.com"
+      >
+
+
+      <label for="authPassword">
+        Password
+      </label>
+
+      <input
+        id="authPassword"
+        type="password"
+        autocomplete="current-password"
+        required
+        placeholder="At least 6 characters"
+      >
+
+
+      <div
+        id="profileFields"
+        class="profile-fields"
+        hidden
+      >
+
+        <label for="profileName">
+          Full name
+        </label>
+
+        <input
+          id="profileName"
+          type="text"
+          autocomplete="name"
+          placeholder="Your full name"
+        >
+
+
+        <label for="profilePhone">
+          Phone
+        </label>
+
+        <input
+          id="profilePhone"
+          type="tel"
+          autocomplete="tel"
+          placeholder="01XXXXXXXXX"
+        >
+
+
+        <label for="profileLocation">
+          Location
+        </label>
+
+        <input
+          id="profileLocation"
+          type="text"
+          placeholder="Dhaka, Bangladesh"
+        >
+
+
+        <label for="profileEducation">
+          Education
+        </label>
+
+        <input
+          id="profileEducation"
+          type="text"
+          placeholder="Your education"
+        >
+
+
+        <label for="profileSkills">
+          Skills
+        </label>
+
+        <input
+          id="profileSkills"
+          type="text"
+          placeholder="e.g. Excel, Communication, Textile"
+        >
+
+
+        <label for="profileBio">
+          Bio
+        </label>
+
+        <textarea
+          id="profileBio"
+          rows="3"
+          placeholder="Tell employers a little about yourself"
+        ></textarea>
+
+
+        <label for="profileCv">
+          CV URL
+          <span class="optional">(optional)</span>
+        </label>
+
+        <input
+          id="profileCv"
+          type="url"
+          placeholder="https://..."
+        >
+
+      </div>
+
+
+      <button
+        class="auth-submit"
+        id="authSubmit"
+        type="submit"
+      >
+        Sign in
+      </button>
+
+
+      <p
+        class="auth-message"
+        id="authMessage"
+        role="status"
+      ></p>
+
+    </form>
+
   </div>
+
+</div>
+
+
+<footer class="footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+      <a href="#" class="logo footer-logo">
+
+        <span class="logo-mark">P</span>
+
+        <span>
+          Prothom<span class="logo-highlight">Chakri</span>
+        </span>
+
+      </a>
+
+      <p>
+        Your First Step to Your Career.
+      </p>
+
+      <p class="copyright">
+        © 2026 ProthomChakri. All rights reserved.
+      </p>
+
+    </div>
+
+
+    <div class="footer-column">
+
+      <h4>For Job Seekers</h4>
+
+      <a href="#jobs">Find Jobs</a>
+      <a href="#">Career Resources</a>
+      <a href="#">CV Builder</a>
+      <a href="#">Job Alerts</a>
+
+    </div>
+
+
+    <div class="footer-column">
+
+      <h4>For Employers</h4>
+
+      <a href="#">Post a Job</a>
+      <a href="#">Find Candidates</a>
+      <a href="#">Employer Dashboard</a>
+      <a href="#">Pricing</a>
+
+    </div>
+
+
+    <div class="footer-column">
+
+      <h4>ProthomChakri</h4>
+
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms</a>
+
+    </div>
+
+  </div>
+
 </footer>
 
+
 <script src="script.js"></script>
+
 </body>
 </html>
