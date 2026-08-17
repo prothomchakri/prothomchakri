@@ -1,1359 +1,1126 @@
-/* =========================================================
-   PROTHOMCHAKRI - SUPABASE SCRIPT
-   ========================================================= */
+// =====================================================
+// PROTHOMCHAKRI - SUPABASE CONNECTION
+// =====================================================
 
-/* -----------------------------
-   SUPABASE CONFIGURATION
------------------------------ */
+const SUPABASE_URL =
+    "https://sckqfcquvltoycnqyfcp.supabase.co";
 
-const SUPABASE_URL = "https://sckqfcquvltoycnqyfcp.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_X7Ln-nQRPbgLjoTZCADvrg_L7tMs-ML";
 
-const SUPABASE_ANON_KEY =
-  "sb_publishable_X7Ln-nQRPbgLjoTZCADvrg_L7tMs-ML";
-
-const supabaseClient =
-  window.supabase.createClient(
+const supabaseClient = supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+    SUPABASE_PUBLISHABLE_KEY
+);
 
 
-/* -----------------------------
-   DOM ELEMENTS
------------------------------ */
+// =====================================================
+// GLOBAL VARIABLES
+// =====================================================
 
-const authOverlay =
-  document.getElementById("authOverlay");
-
-const authClose =
-  document.getElementById("authClose");
-
-const signInTab =
-  document.getElementById("signInTab");
-
-const registerTab =
-  document.getElementById("registerTab");
-
-const authForm =
-  document.getElementById("authForm");
-
-const authTitle =
-  document.getElementById("authTitle");
-
-const authSubtitle =
-  document.getElementById("authSubtitle");
-
-const authSubmit =
-  document.getElementById("authSubmit");
-
-const authMessage =
-  document.getElementById("authMessage");
-
-const authEmail =
-  document.getElementById("authEmail");
-
-const authPassword =
-  document.getElementById("authPassword");
-
-const profileFields =
-  document.getElementById("profileFields");
-
-const profileName =
-  document.getElementById("profileName");
-
-const profilePhone =
-  document.getElementById("profilePhone");
-
-const profileLocation =
-  document.getElementById("profileLocation");
-
-const profileEducation =
-  document.getElementById("profileEducation");
-
-const profileSkills =
-  document.getElementById("profileSkills");
-
-const profileBio =
-  document.getElementById("profileBio");
-
-const profileCv =
-  document.getElementById("profileCv");
-
-const loginButton =
-  document.querySelector(".login-btn");
-
-const employerButton =
-  document.querySelector(".employer-btn");
-
-const mobileMenu =
-  document.getElementById("mobileMenu");
-
-const searchButton =
-  document.getElementById("searchButton");
-
-const jobSearch =
-  document.getElementById("jobSearch");
-
-const locationSearch =
-  document.getElementById("locationSearch");
-
-const jobList =
-  document.getElementById("jobList");
+let currentUser = null;
+let currentProfile = null;
 
 
-/* -----------------------------
-   AUTH MODE
------------------------------ */
+// =====================================================
+// PAGE NAVIGATION
+// =====================================================
 
-let authMode = "signin";
+function hideAllPages() {
 
+    document.getElementById("homePage").classList.add("hidden");
+    document.getElementById("jobsPage").classList.add("hidden");
+    document.getElementById("dashboardPage").classList.add("hidden");
+    document.getElementById("profilePage").classList.add("hidden");
 
-/* =========================================================
-   AUTH MODAL
-========================================================= */
-
-function openAuthModal(mode = "signin") {
-
-  authMode = mode;
-
-  authOverlay.classList.add("open");
-
-  authOverlay.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-  document.body.style.overflow = "hidden";
-
-  setAuthMode(mode);
-
-  clearAuthMessage();
 }
 
 
-function closeAuthModal() {
+function showHome() {
 
-  authOverlay.classList.remove("open");
+    hideAllPages();
 
-  authOverlay.setAttribute(
-    "aria-hidden",
-    "true"
-  );
+    document.getElementById("homePage")
+        .classList.remove("hidden");
 
-  document.body.style.overflow = "";
-
-  clearAuthMessage();
 }
 
 
-function setAuthMode(mode) {
+function showJobs() {
 
-  authMode = mode;
+    hideAllPages();
 
-  if (mode === "register") {
+    document.getElementById("jobsPage")
+        .classList.remove("hidden");
 
-    signInTab.classList.remove("active");
-    registerTab.classList.add("active");
-
-    authTitle.textContent =
-      "Create your account";
-
-    authSubtitle.textContent =
-      "Create your ProthomChakri profile.";
-
-    authSubmit.textContent =
-      "Create account";
-
-    profileFields.hidden = false;
-
-    authPassword.autocomplete =
-      "new-password";
-
-  } else {
-
-    signInTab.classList.add("active");
-    registerTab.classList.remove("active");
-
-    authTitle.textContent =
-      "Welcome back";
-
-    authSubtitle.textContent =
-      "Sign in to continue.";
-
-    authSubmit.textContent =
-      "Sign in";
-
-    profileFields.hidden = true;
-
-    authPassword.autocomplete =
-      "current-password";
-  }
-
-  clearAuthMessage();
 }
 
 
-function clearAuthMessage() {
+function showDashboard() {
 
-  if (!authMessage) return;
+    if (!currentUser) {
 
-  authMessage.textContent = "";
+        openLogin();
+        return;
 
-  authMessage.classList.remove("error");
-}
-
-
-function showAuthMessage(message, isError = false) {
-
-  if (!authMessage) return;
-
-  authMessage.textContent = message;
-
-  authMessage.classList.toggle(
-    "error",
-    isError
-  );
-}
-
-
-/* =========================================================
-   SIGN IN
-========================================================= */
-
-async function signInUser(email, password) {
-
-  const {
-    data,
-    error
-  } = await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: password
-  });
-
-  if (error) {
-
-    console.error(
-      "Sign in error:",
-      error
-    );
-
-    throw error;
-  }
-
-  return data;
-}
-
-
-/* =========================================================
-   REGISTRATION
-========================================================= */
-
-async function registerUser() {
-
-  const email =
-    authEmail.value.trim();
-
-  const password =
-    authPassword.value;
-
-  const name =
-    profileName.value.trim();
-
-  const phone =
-    profilePhone.value.trim();
-
-  const location =
-    profileLocation.value.trim();
-
-  const education =
-    profileEducation.value.trim();
-
-  const skills =
-    profileSkills.value.trim();
-
-  const bio =
-    profileBio.value.trim();
-
-  const cvUrl =
-    profileCv.value.trim();
-
-
-  if (!email || !password) {
-
-    throw new Error(
-      "Please enter your email and password."
-    );
-  }
-
-
-  if (password.length < 6) {
-
-    throw new Error(
-      "Password must be at least 6 characters."
-    );
-  }
-
-
-  if (!name) {
-
-    throw new Error(
-      "Please enter your full name."
-    );
-  }
-
-
-  /* Create Supabase Auth user */
-
-  const {
-    data,
-    error
-  } = await supabaseClient.auth.signUp({
-
-    email: email,
-
-    password: password,
-
-    options: {
-      data: {
-        full_name: name
-      }
     }
 
-  });
+    hideAllPages();
 
+    document.getElementById("dashboardPage")
+        .classList.remove("hidden");
 
-  if (error) {
+    loadProfile();
 
-    console.error(
-      "Registration error:",
-      error
-    );
-
-    throw error;
-  }
-
-
-  /*
-    If email confirmation is disabled,
-    data.user will have an active session.
-
-    If email confirmation is enabled,
-    the user will need to confirm their email.
-  */
-
-  if (!data.user) {
-
-    throw new Error(
-      "Account could not be created."
-    );
-  }
-
-
-  /*
-    Create profile only when we have
-    an authenticated session.
-  */
-
-  if (data.session) {
-
-    await createProfile(
-      data.user.id,
-      {
-        full_name: name,
-        phone: phone,
-        location: location,
-        education: education,
-        skills: skills,
-        bio: bio,
-        cv_url: cvUrl
-      }
-    );
-
-  }
-
-
-  return data;
 }
 
 
-/* =========================================================
-   CREATE PROFILE
-========================================================= */
+function showProfileForm() {
 
-async function createProfile(
-  userId,
-  profileData
-) {
+    if (!currentUser) {
 
-  const profile = {
+        openLogin();
+        return;
 
-    id: userId,
+    }
 
-    full_name:
-      profileData.full_name || null,
+    hideAllPages();
 
-    phone:
-      profileData.phone || null,
+    document.getElementById("profilePage")
+        .classList.remove("hidden");
 
-    location:
-      profileData.location || null,
+    fillProfileForm();
 
-    education:
-      profileData.education || null,
-
-    skills:
-      profileData.skills || null,
-
-    bio:
-      profileData.bio || null,
-
-    cv_url:
-      profileData.cv_url || null
-  };
-
-
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("profiles")
-    .insert(profile)
-    .select()
-    .single();
-
-
-  if (error) {
-
-    console.error(
-      "Profile creation error:",
-      error
-    );
-
-    throw error;
-  }
-
-
-  return data;
 }
 
 
-/* =========================================================
-   UPDATE PROFILE
-========================================================= */
+// =====================================================
+// AUTH MODAL
+// =====================================================
 
-async function updateProfile(
-  userId,
-  profileData
-) {
+function openLogin() {
 
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("profiles")
-    .update(profileData)
-    .eq("id", userId)
-    .select()
-    .single();
+    document.getElementById("authModal")
+        .classList.remove("hidden");
 
+    document.getElementById("loginFormContainer")
+        .classList.remove("hidden");
 
-  if (error) {
+    document.getElementById("registerFormContainer")
+        .classList.add("hidden");
 
-    console.error(
-      "Profile update error:",
-      error
-    );
+    clearMessages();
 
-    throw error;
-  }
-
-
-  return data;
 }
 
 
-/* =========================================================
-   GET PROFILE
-========================================================= */
+function openRegister() {
 
-async function getProfile(userId) {
+    document.getElementById("authModal")
+        .classList.remove("hidden");
 
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("profiles")
-    .select("*")
-    .eq("id", userId)
-    .maybeSingle();
+    document.getElementById("loginFormContainer")
+        .classList.add("hidden");
 
+    document.getElementById("registerFormContainer")
+        .classList.remove("hidden");
 
-  if (error) {
+    clearMessages();
 
-    console.error(
-      "Profile loading error:",
-      error
-    );
-
-    return null;
-  }
-
-
-  return data;
 }
 
 
-/* =========================================================
-   LOGOUT
-========================================================= */
+function closeAuth() {
 
-async function logoutUser() {
+    document.getElementById("authModal")
+        .classList.add("hidden");
 
-  const {
-    error
-  } = await supabaseClient.auth.signOut();
+    clearMessages();
 
-
-  if (error) {
-
-    console.error(
-      "Logout error:",
-      error
-    );
-
-    throw error;
-  }
-
-
-  updateLoginButton(null);
-
-  alert(
-    "You have been signed out."
-  );
 }
 
 
-/* =========================================================
-   UPDATE SIGN-IN BUTTON
-========================================================= */
+function clearMessages() {
 
-function updateLoginButton(user) {
+    document.querySelectorAll(".message")
+        .forEach(element => {
 
-  if (!loginButton) return;
+            element.textContent = "";
 
+        });
 
-  if (!user) {
-
-    loginButton.textContent =
-      "Sign in";
-
-    loginButton.onclick = () => {
-      openAuthModal("signin");
-    };
-
-    return;
-  }
+}
 
 
-  let displayName =
-    user.user_metadata?.full_name ||
-    user.email?.split("@")[0] ||
-    "Account";
+// =====================================================
+// REGISTER
+// =====================================================
+
+document
+    .getElementById("registerForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
 
 
-  loginButton.textContent =
-    displayName;
+        const fullName =
+            document
+                .getElementById("registerFullName")
+                .value
+                .trim();
 
 
-  loginButton.onclick =
-    async () => {
-
-      const choice =
-        confirm(
-          "You are signed in as " +
-          displayName +
-          ".\n\nPress OK to sign out."
-        );
+        const email =
+            document
+                .getElementById("registerEmail")
+                .value
+                .trim();
 
 
-      if (choice) {
+        const password =
+            document
+                .getElementById("registerPassword")
+                .value;
+
+
+        const genderIdentity =
+            document
+                .getElementById("genderIdentity")
+                .value;
+
+
+        const message =
+            document
+                .getElementById("registerMessage");
+
+
+        message.textContent =
+            "Creating your account...";
+
+        message.style.color = "#146cda";
+
 
         try {
 
-          await logoutUser();
+            // Create Supabase Auth account
+
+            const {
+                data,
+                error
+            } = await supabaseClient.auth.signUp({
+
+                email: email,
+
+                password: password,
+
+                options: {
+
+                    data: {
+
+                        full_name: fullName,
+
+                        gender_identity:
+                            genderIdentity
+
+                    }
+
+                }
+
+            });
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            // Create profile if user was returned
+
+            if (data.user) {
+
+                const profileData = {
+
+                    auth_user_id:
+                        data.user.id,
+
+                    full_name:
+                        fullName,
+
+                    email:
+                        email,
+
+                    gender_identity:
+                        genderIdentity
+
+                };
+
+
+                const {
+                    error: profileError
+                } = await supabaseClient
+                    .from("profiles")
+                    .upsert(
+
+                        profileData,
+
+                        {
+                            onConflict:
+                                "auth_user_id"
+                        }
+
+                    );
+
+
+                if (profileError) {
+
+                    console.log(
+                        "Profile creation:",
+                        profileError.message
+                    );
+
+                }
+
+            }
+
+
+            // Successful registration
+
+            message.style.color =
+                "#198754";
+
+
+            if (data.session) {
+
+                message.textContent =
+                    "Registration successful!";
+
+
+                currentUser =
+                    data.user;
+
+
+                await loadProfile();
+
+
+                document
+                    .getElementById("registerForm")
+                    .reset();
+
+
+                setTimeout(function() {
+
+                    closeAuth();
+
+                    showDashboard();
+
+                    showToast(
+                        "Welcome to ProthomChakri!"
+                    );
+
+                }, 500);
+
+
+            } else {
+
+                message.textContent =
+                    "Account created! Please check your email to verify your account.";
+
+                document
+                    .getElementById("registerForm")
+                    .reset();
+
+            }
+
 
         } catch (error) {
 
-          alert(
-            error.message ||
-            "Could not sign out."
-          );
+            console.error(error);
+
+
+            message.style.color =
+                "#d34848";
+
+
+            message.textContent =
+                error.message ||
+                "Registration failed.";
 
         }
 
-      }
-
-    };
-
-}
+    });
 
 
-/* =========================================================
-   AUTH STATE
-========================================================= */
+// =====================================================
+// LOGIN
+// =====================================================
 
-async function handleAuthState() {
+document
+    .getElementById("loginForm")
+    .addEventListener("submit", async function(event) {
 
-  const {
-    data
-  } = await supabaseClient.auth.getSession();
-
-
-  const session =
-    data?.session;
+        event.preventDefault();
 
 
-  if (session?.user) {
-
-    updateLoginButton(
-      session.user
-    );
-
-  } else {
-
-    updateLoginButton(null);
-
-  }
+        const email =
+            document
+                .getElementById("loginEmail")
+                .value
+                .trim();
 
 
-  supabaseClient.auth.onAuthStateChange(
-    async (event, session) => {
-
-      console.log(
-        "Auth event:",
-        event
-      );
+        const password =
+            document
+                .getElementById("loginPassword")
+                .value;
 
 
-      if (session?.user) {
+        const message =
+            document
+                .getElementById("loginMessage");
 
-        updateLoginButton(
-          session.user
-        );
 
-      } else {
+        message.textContent =
+            "Logging in...";
 
-        updateLoginButton(null);
+        message.style.color =
+            "#146cda";
 
-      }
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .auth
+                .signInWithPassword({
+
+                    email:
+                        email,
+
+                    password:
+                        password
+
+                });
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            currentUser =
+                data.user;
+
+
+            await loadProfile();
+
+
+            message.style.color =
+                "#198754";
+
+
+            message.textContent =
+                "Login successful!";
+
+
+            setTimeout(function() {
+
+                closeAuth();
+
+                showDashboard();
+
+                showToast(
+                    "Welcome back!"
+                );
+
+            }, 500);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            message.style.color =
+                "#d34848";
+
+
+            message.textContent =
+                error.message ||
+                "Login failed.";
+
+        }
+
+    });
+
+
+// =====================================================
+// AUTH SESSION
+// =====================================================
+
+async function initializeAuth() {
+
+    const {
+        data
+    } = await supabaseClient
+        .auth
+        .getSession();
+
+
+    if (data.session) {
+
+        currentUser =
+            data.session.user;
+
+        await loadProfile();
 
     }
-  );
+
+
+    updateNavigation();
+
+
+    supabaseClient.auth
+        .onAuthStateChange(
+            async function(event, session) {
+
+                currentUser =
+                    session?.user || null;
+
+
+                if (currentUser) {
+
+                    await loadProfile();
+
+                } else {
+
+                    currentProfile = null;
+
+                }
+
+
+                updateNavigation();
+
+            }
+        );
 
 }
 
 
-/* =========================================================
-   AUTH FORM SUBMIT
-========================================================= */
+// =====================================================
+// NAVIGATION STATE
+// =====================================================
 
-if (authForm) {
+function updateNavigation() {
 
-  authForm.addEventListener(
-    "submit",
-    async function(event) {
-
-      event.preventDefault();
-
-      clearAuthMessage();
-
-      const email =
-        authEmail.value.trim();
-
-      const password =
-        authPassword.value;
+    document
+        .getElementById("loginBtn")
+        .classList.toggle(
+            "hidden",
+            !!currentUser
+        );
 
 
-      if (!email || !password) {
+    document
+        .getElementById("registerBtn")
+        .classList.toggle(
+            "hidden",
+            !!currentUser
+        );
 
-        showAuthMessage(
-          "Please enter your email and password.",
-          true
+
+    document
+        .getElementById("dashboardBtn")
+        .classList.toggle(
+            "hidden",
+            !currentUser
+        );
+
+
+    document
+        .getElementById("logoutBtn")
+        .classList.toggle(
+            "hidden",
+            !currentUser
+        );
+
+}
+
+
+// =====================================================
+// LOAD PROFILE
+// =====================================================
+
+async function loadProfile() {
+
+    if (!currentUser) {
+
+        return;
+
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq(
+            "auth_user_id",
+            currentUser.id
+        )
+        .maybeSingle();
+
+
+    if (error) {
+
+        console.log(
+            "Profile loading error:",
+            error.message
+        );
+
+    }
+
+
+    currentProfile =
+        data || {
+
+            auth_user_id:
+                currentUser.id,
+
+            full_name:
+                currentUser
+                    .user_metadata
+                    ?.full_name ||
+                "Your Name",
+
+            email:
+                currentUser.email,
+
+            gender_identity:
+                currentUser
+                    .user_metadata
+                    ?.gender_identity ||
+                ""
+
+        };
+
+
+    renderProfile();
+
+}
+
+
+// =====================================================
+// DISPLAY PROFILE
+// =====================================================
+
+function renderProfile() {
+
+    if (!currentProfile) {
+
+        return;
+
+    }
+
+
+    const name =
+        currentProfile.full_name ||
+        "Your Name";
+
+
+    const firstLetter =
+        name
+            .charAt(0)
+            .toUpperCase();
+
+
+    document
+        .getElementById("welcomeName")
+        .textContent =
+        name.split(" ")[0];
+
+
+    document
+        .getElementById("profileName")
+        .textContent =
+        name;
+
+
+    document
+        .getElementById("profileGender")
+        .textContent =
+        currentProfile.gender_identity ||
+        "Gender not added";
+
+
+    document
+        .getElementById("profileAvatar")
+        .textContent =
+        firstLetter;
+
+
+    document
+        .getElementById("profileBio")
+        .textContent =
+        currentProfile.bio ||
+        "Add your professional bio.";
+
+
+    document
+        .getElementById("profileEducation")
+        .textContent =
+        currentProfile.education ||
+        "Not added";
+
+
+    document
+        .getElementById("profileSkills")
+        .textContent =
+        currentProfile.skills ||
+        "Not added";
+
+
+    document
+        .getElementById("profileExperience")
+        .textContent =
+        currentProfile.experience ||
+        "Not added";
+
+
+    document
+        .getElementById("profileLocation")
+        .textContent =
+        currentProfile.location ||
+        "Not added";
+
+
+    // Profile completion
+
+    const fields = [
+
+        "full_name",
+        "gender_identity",
+        "headline",
+        "bio",
+        "education",
+        "skills",
+        "experience",
+        "location"
+
+    ];
+
+
+    let completed = 0;
+
+
+    fields.forEach(function(field) {
+
+        if (
+            currentProfile[field] &&
+            String(
+                currentProfile[field]
+            ).trim()
+        ) {
+
+            completed++;
+
+        }
+
+    });
+
+
+    const percentage =
+        Math.round(
+            completed /
+            fields.length *
+            100
+        );
+
+
+    document
+        .getElementById("profileProgress")
+        .style.width =
+        percentage + "%";
+
+
+    document
+        .getElementById("completionText")
+        .textContent =
+        percentage +
+        "% Complete";
+
+}
+
+
+// =====================================================
+// PROFILE FORM
+// =====================================================
+
+function fillProfileForm() {
+
+    if (!currentProfile) {
+
+        return;
+
+    }
+
+
+    document
+        .getElementById("editFullName")
+        .value =
+        currentProfile.full_name || "";
+
+
+    document
+        .getElementById("editGender")
+        .value =
+        currentProfile.gender_identity || "";
+
+
+    document
+        .getElementById("editHeadline")
+        .value =
+        currentProfile.headline || "";
+
+
+    document
+        .getElementById("editBio")
+        .value =
+        currentProfile.bio || "";
+
+
+    document
+        .getElementById("editEducation")
+        .value =
+        currentProfile.education || "";
+
+
+    document
+        .getElementById("editSkills")
+        .value =
+        currentProfile.skills || "";
+
+
+    document
+        .getElementById("editExperience")
+        .value =
+        currentProfile.experience || "";
+
+
+    document
+        .getElementById("editLocation")
+        .value =
+        currentProfile.location || "";
+
+}
+
+
+// =====================================================
+// SAVE PROFILE
+// =====================================================
+
+document
+    .getElementById("profileForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        if (!currentUser) {
+
+            openLogin();
+
+            return;
+
+        }
+
+
+        const message =
+            document
+                .getElementById(
+                    "profileMessage"
+                );
+
+
+        message.textContent =
+            "Saving profile...";
+
+        message.style.color =
+            "#146cda";
+
+
+        const profileData = {
+
+            auth_user_id:
+                currentUser.id,
+
+            full_name:
+                document
+                    .getElementById(
+                        "editFullName"
+                    )
+                    .value
+                    .trim(),
+
+            email:
+                currentUser.email,
+
+            gender_identity:
+                document
+                    .getElementById(
+                        "editGender"
+                    )
+                    .value,
+
+            headline:
+                document
+                    .getElementById(
+                        "editHeadline"
+                    )
+                    .value
+                    .trim(),
+
+            bio:
+                document
+                    .getElementById(
+                        "editBio"
+                    )
+                    .value
+                    .trim(),
+
+            education:
+                document
+                    .getElementById(
+                        "editEducation"
+                    )
+                    .value
+                    .trim(),
+
+            skills:
+                document
+                    .getElementById(
+                        "editSkills"
+                    )
+                    .value
+                    .trim(),
+
+            experience:
+                document
+                    .getElementById(
+                        "editExperience"
+                    )
+                    .value
+                    .trim(),
+
+            location:
+                document
+                    .getElementById(
+                        "editLocation"
+                    )
+                    .value
+                    .trim()
+
+        };
+
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from("profiles")
+                .upsert(
+
+                    profileData,
+
+                    {
+                        onConflict:
+                            "auth_user_id"
+                    }
+
+                )
+                .select()
+                .single();
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            currentProfile =
+                data;
+
+
+            renderProfile();
+
+
+            message.style.color =
+                "#198754";
+
+
+            message.textContent =
+                "Profile saved successfully!";
+
+
+            showToast(
+                "Profile updated successfully."
+            );
+
+
+            setTimeout(function() {
+
+                showDashboard();
+
+            }, 700);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            message.style.color =
+                "#d34848";
+
+
+            message.textContent =
+                "Could not save profile: " +
+                error.message;
+
+        }
+
+    });
+
+
+// =====================================================
+// LOGOUT
+// =====================================================
+
+async function logout() {
+
+    const {
+        error
+    } = await supabaseClient
+        .auth
+        .signOut();
+
+
+    if (error) {
+
+        showToast(
+            error.message
         );
 
         return;
-      }
-
-
-      authSubmit.disabled = true;
-
-
-      if (authMode === "signin") {
-
-        authSubmit.textContent =
-          "Signing in...";
-
-      } else {
-
-        authSubmit.textContent =
-          "Creating account...";
-      }
-
-
-      try {
-
-        if (authMode === "signin") {
-
-          const result =
-            await signInUser(
-              email,
-              password
-            );
-
-
-          updateLoginButton(
-            result.user
-          );
-
-
-          showAuthMessage(
-            "Signed in successfully."
-          );
-
-
-          setTimeout(() => {
-
-            closeAuthModal();
-
-          }, 700);
-
-
-        } else {
-
-          const result =
-            await registerUser();
-
-
-          if (result.session) {
-
-            updateLoginButton(
-              result.user
-            );
-
-
-            showAuthMessage(
-              "Account created successfully."
-            );
-
-
-            setTimeout(() => {
-
-              closeAuthModal();
-
-            }, 1000);
-
-          } else {
-
-            showAuthMessage(
-              "Account created. Please check your email to confirm your account."
-            );
-
-          }
-
-        }
-
-      } catch (error) {
-
-        console.error(error);
-
-        let message =
-          error?.message ||
-          "Something went wrong.";
-
-
-        /*
-          Make common Supabase messages
-          easier to understand.
-        */
-
-        if (
-          message.toLowerCase().includes(
-            "invalid login credentials"
-          )
-        ) {
-
-          message =
-            "Incorrect email or password.";
-
-        }
-
-
-        if (
-          message.toLowerCase().includes(
-            "user already registered"
-          )
-        ) {
-
-          message =
-            "This email is already registered. Please sign in.";
-
-        }
-
-
-        showAuthMessage(
-          message,
-          true
-        );
-
-      } finally {
-
-        authSubmit.disabled = false;
-
-        authSubmit.textContent =
-          authMode === "signin"
-            ? "Sign in"
-            : "Create account";
-
-      }
 
     }
-  );
-
-}
 
 
-/* =========================================================
-   AUTH BUTTON EVENTS
-========================================================= */
+    currentUser = null;
 
-if (loginButton) {
-
-  loginButton.addEventListener(
-    "click",
-    () => {
-
-      /*
-        If updateLoginButton() has replaced
-        onclick for a logged-in user,
-        this listener may still open the modal.
-
-        The current onclick handler takes
-        precedence for logged-in users.
-      */
-
-      if (
-        !loginButton.onclick ||
-        loginButton.textContent === "Sign in"
-      ) {
-
-        openAuthModal("signin");
-
-      }
-
-    }
-  );
-
-}
+    currentProfile = null;
 
 
-if (authClose) {
+    updateNavigation();
 
-  authClose.addEventListener(
-    "click",
-    closeAuthModal
-  );
-
-}
+    showHome();
 
 
-if (authOverlay) {
-
-  authOverlay.addEventListener(
-    "click",
-    function(event) {
-
-      if (
-        event.target === authOverlay
-      ) {
-
-        closeAuthModal();
-
-      }
-
-    }
-  );
-
-}
-
-
-document.addEventListener(
-  "keydown",
-  function(event) {
-
-    if (
-      event.key === "Escape" &&
-      authOverlay.classList.contains("open")
-    ) {
-
-      closeAuthModal();
-
-    }
-
-  }
-);
-
-
-if (signInTab) {
-
-  signInTab.addEventListener(
-    "click",
-    () => {
-
-      setAuthMode("signin");
-
-    }
-  );
-
-}
-
-
-if (registerTab) {
-
-  registerTab.addEventListener(
-    "click",
-    () => {
-
-      setAuthMode("register");
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-function performJobSearch() {
-
-  const query =
-    jobSearch.value
-      .trim()
-      .toLowerCase();
-
-  const location =
-    locationSearch.value
-      .trim()
-      .toLowerCase();
-
-
-  const cards =
-    Array.from(
-      document.querySelectorAll(".job-card")
+    showToast(
+        "You have been logged out."
     );
 
-
-  let visibleCount = 0;
-
-
-  cards.forEach(card => {
-
-    const title =
-      (
-        card.dataset.title ||
-        ""
-      ).toLowerCase();
-
-    const category =
-      (
-        card.dataset.category ||
-        ""
-      ).toLowerCase();
-
-    const cardLocation =
-      (
-        card.dataset.location ||
-        ""
-      ).toLowerCase();
-
-    const company =
-      (
-        card.querySelector(
-          ".company-name"
-        )?.textContent ||
-        ""
-      ).toLowerCase();
-
-
-    const matchesQuery =
-      !query ||
-      title.includes(query) ||
-      category.includes(query) ||
-      company.includes(query);
-
-
-    const matchesLocation =
-      !location ||
-      cardLocation === location;
-
-
-    if (
-      matchesQuery &&
-      matchesLocation
-    ) {
-
-      card.style.display =
-        "flex";
-
-      visibleCount++;
-
-    } else {
-
-      card.style.display =
-        "none";
-
-    }
-
-  });
-
-
-  showNoResultsMessage(
-    visibleCount === 0
-  );
-
 }
 
 
-function showNoResultsMessage(show) {
+// =====================================================
+// JOB SEARCH
+// =====================================================
 
-  const existing =
-    document.querySelector(
-      ".no-results"
-    );
+function filterJobs() {
 
-
-  if (show) {
-
-    if (existing) return;
-
-
-    const message =
-      document.createElement("div");
-
-
-    message.className =
-      "no-results";
-
-
-    message.innerHTML = `
-      <h3>No jobs found</h3>
-      <p>Try another job title, skill, company or location.</p>
-    `;
-
-
-    jobList.appendChild(message);
-
-  } else {
-
-    if (existing) {
-
-      existing.remove();
-
-    }
-
-  }
-
-}
-
-
-if (searchButton) {
-
-  searchButton.addEventListener(
-    "click",
-    performJobSearch
-  );
-
-}
-
-
-if (jobSearch) {
-
-  jobSearch.addEventListener(
-    "keydown",
-    event => {
-
-      if (
-        event.key === "Enter"
-      ) {
-
-        performJobSearch();
-
-      }
-
-    }
-  );
-
-}
-
-
-if (locationSearch) {
-
-  locationSearch.addEventListener(
-    "change",
-    performJobSearch
-  );
-
-}
-
-
-/* =========================================================
-   POPULAR SEARCH BUTTONS
-========================================================= */
-
-document
-  .querySelectorAll(
-    ".popular-searches button"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        jobSearch.value =
-          button.textContent.trim();
-
-        performJobSearch();
-
+    const query =
         document
-          .getElementById("jobs")
-          ?.scrollIntoView({
-            behavior:"smooth"
-          });
-
-      }
-    );
-
-  });
+            .getElementById(
+                "jobSearch"
+            )
+            .value
+            .toLowerCase();
 
 
-/* =========================================================
-   CATEGORY FILTERS
-========================================================= */
+    document
+        .querySelectorAll(
+            ".job-card"
+        )
+        .forEach(function(card) {
 
-document
-  .querySelectorAll(
-    ".category-card"
-  )
-  .forEach(card => {
+            if (
+                card.textContent
+                    .toLowerCase()
+                    .includes(query)
+            ) {
 
-    card.addEventListener(
-      "click",
-      () => {
+                card.style.display =
+                    "flex";
 
-        const category =
-          card.dataset.category || "";
+            } else {
 
+                card.style.display =
+                    "none";
 
-        jobSearch.value =
-          category;
+            }
 
+        });
 
-        locationSearch.value =
-          "";
-
-
-        performJobSearch();
+}
 
 
+// =====================================================
+// TOAST
+// =====================================================
+
+function showToast(text) {
+
+    const toast =
         document
-          .getElementById("jobs")
-          ?.scrollIntoView({
-            behavior:"smooth"
-          });
+            .getElementById(
+                "toast"
+            );
 
-      }
+
+    toast.textContent =
+        text;
+
+
+    toast.classList.add(
+        "show"
     );
 
-  });
 
+    setTimeout(function() {
 
-/* =========================================================
-   BOOKMARKS
-========================================================= */
-
-document
-  .querySelectorAll(
-    ".bookmark"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      async function() {
-
-        const {
-          data
-        } =
-          await supabaseClient.auth.getSession();
-
-
-        if (!data?.session) {
-
-          openAuthModal("signin");
-
-          return;
-
-        }
-
-
-        this.classList.toggle(
-          "saved"
+        toast.classList.remove(
+            "show"
         );
 
-
-        this.textContent =
-          this.classList.contains("saved")
-            ? "♥"
-            : "♡";
-
-      }
-    );
-
-  });
-
-
-/* =========================================================
-   POST A JOB BUTTON
-========================================================= */
-
-if (employerButton) {
-
-  employerButton.addEventListener(
-    "click",
-    () => {
-
-      alert(
-        "Employer job posting will be available soon."
-      );
-
-    }
-  );
+    }, 2500);
 
 }
 
 
-document
-  .querySelectorAll(
-    ".employer-cta, .dark-button"
-  )
-  .forEach(button => {
+// =====================================================
+// START WEBSITE
+// =====================================================
 
-    button.addEventListener(
-      "click",
-      () => {
-
-        alert(
-          "Employer job posting will be available soon."
-        );
-
-      }
-    );
-
-  });
-
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
-
-if (mobileMenu) {
-
-  mobileMenu.addEventListener(
-    "click",
-    () => {
-
-      const nav =
-        document.querySelector(
-          ".nav-links"
-        );
-
-
-      if (!nav) return;
-
-
-      const visible =
-        nav.style.display === "flex";
-
-
-      if (visible) {
-
-        nav.style.display =
-          "";
-
-      } else {
-
-        nav.style.display =
-          "flex";
-
-        nav.style.position =
-          "absolute";
-
-        nav.style.top =
-          "72px";
-
-        nav.style.left =
-          "0";
-
-        nav.style.right =
-          "0";
-
-        nav.style.padding =
-          "20px";
-
-        nav.style.background =
-          "#fff";
-
-        nav.style.flexDirection =
-          "column";
-
-        nav.style.borderBottom =
-          "1px solid #edf0f3";
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  async () => {
-
-    console.log(
-      "ProthomChakri loaded."
-    );
-
-
-    try {
-
-      await handleAuthState();
-
-    } catch (error) {
-
-      console.error(
-        "Supabase initialization error:",
-        error
-      );
-
-    }
-
-  }
-);
+initializeAuth();
